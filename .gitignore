@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+examples/dist/
+artifacts/*.png
+artifacts/*.gif
+artifacts/frames/
+
+# Local references and working notes
+research/
+plans/
+blockbench/

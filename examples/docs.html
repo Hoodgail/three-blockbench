@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="three-blockbench loader guide" />
+    <title>Loader guide — three-blockbench</title>
+    <link rel="stylesheet" href="/src/docs.css" />
+  </head>
+  <body>
+    <header class="docs-header">
+      <a class="docs-brand" href="./"><span aria-hidden="true">▥</span> three-blockbench</a>
+      <nav><a href="./">Live example</a><a href="https://github.com/Hoodgail/three-blockbench">GitHub</a></nav>
+    </header>
+    <div class="docs-layout">
+      <aside>
+        <p>Loader guide</p>
+        <nav aria-label="Documentation sections">
+          <a href="#install">Install</a>
+          <a href="#load">Load a model</a>
+          <a href="#result">Result maps</a>
+          <a href="#animations">Animations</a>
+          <a href="#options">Options</a>
+          <a href="#support">Format support</a>
+        </nav>
+        <small>bbmodel format 5.0<br />Three.js ≥ 0.170</small>
+      </aside>
+      <main>
+        <p class="eyebrow">TYPED ESM LOADER</p>
+        <h1>From Blockbench<br />to a moving scene.</h1>
+        <p class="intro">Load the project you authored—not a reduced export. The result keeps its UUIDs, textures, skeleton, elements, clips, effects, and source metadata.</p>
+
+        <section id="install">
+          <h2>Install</h2>
+          <pre><code>npm install three three-blockbench</code></pre>
+        </section>
+
+        <section id="load">
+          <h2>Load a model</h2>
+          <pre><code>import * as THREE from "three";
+import { BBModelLoader } from "three-blockbench";
+
+const model = await new BBModelLoader().loadAsync(
+  "/models/desert_dog.bbmodel"
+);
+
+scene.add(model.scene);
+const mixer = model.createMixer();
+model.createAction(mixer, "animation.idle").play();
+
+// In your render loop:
+mixer.update(delta);
+model.update(delta);</code></pre>
+          <p>Linked texture paths resolve relative to the `.bbmodel` URL. Embedded data URLs work without extra requests.</p>
+        </section>
+
+        <section id="result">
+          <h2>Use UUID-indexed native objects</h2>
+          <div class="mapping-grid">
+            <article><b>groups</b><span>→</span><code>Map&lt;UUID, Bone&gt;</code></article>
+            <article><b>elements</b><span>→</span><code>Map&lt;UUID, SkinnedMesh&gt;</code></article>
+            <article><b>textures</b><span>→</span><code>Map&lt;UUID, Texture&gt;</code></article>
+            <article><b>animations</b><span>→</span><code>AnimationClip[]</code></article>
+          </div>
+          <pre><code>const head = model.bones.get("group-uuid");
+const body = model.elements.get("element-uuid");
+
+console.log(model.skeleton, model.document.display);
+console.table(model.warnings);</code></pre>
+        </section>
+
+        <section id="animations">
+          <h2>AnimationMixer, without translation code</h2>
+          <p>Position and scale become vector tracks. Rotation becomes quaternion tracks. Mixed linear, step, Catmull-Rom, and Bézier segments are sampled at the authored timeline rate.</p>
+          <pre><code>const walk = model.createAction(mixer, "animation.walk_forward");
+walk.reset().fadeIn(0.2).play();
+
+for (const event of model.effects.get("animation.attack") ?? []) {
+  // Route sound/particle/timeline data to your engine.
+}</code></pre>
+        </section>
+
+        <section id="options">
+          <h2>Stay in control at engine boundaries</h2>
+          <pre><code>new BBModelLoader(undefined, {
+  unitScale: 1 / 16,
+  animationSampleRate: "snapping",
+  maxAnimationSampleRate: 120,
+  strict: false,
+  expressionEvaluator(expression, context) {
+    return molang.evaluate(expression, context);
+  },
+  textureFactory: async ({ url }) =&gt; texturePipeline.load(url),
+  materialFactory: (context) =&gt; makeGameMaterial(context),
+});</code></pre>
+        </section>
+
+        <section id="support">
+          <h2>Supported project data</h2>
+          <ul class="support-list">
+            <li><span>Geometry</span>Cubes, box/per-face UV, mesh polygons, inflation, stretch, pivot rotation</li>
+            <li><span>Rig</span>Nested groups, multiple roots, element animation pivots, rigid skin weights</li>
+            <li><span>Texture</span>Embedded/linked images, layers, render modes, sides, animated atlases</li>
+            <li><span>Timeline</span>All transform channels and interpolation modes, effects, compatibility axes</li>
+            <li><span>Metadata</span>Display transforms, collections, controllers, variable placeholders</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

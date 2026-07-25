@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A live Three.js playback example for three-blockbench." />
+    <title>three-blockbench — Desert dog workbench</title>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <main class="workbench">
+      <header class="masthead">
+        <a class="brand" href="https://github.com/Hoodgail/three-blockbench" aria-label="three-blockbench on GitHub">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>three-blockbench</span>
+        </a>
+        <p class="masthead-note"><span class="status-dot"></span> Live `.bbmodel` → Three.js</p>
+        <nav aria-label="Project links">
+          <a href="./docs.html">Loader guide</a>
+          <a href="https://github.com/Hoodgail/three-blockbench">Source</a>
+        </nav>
+      </header>
+
+      <section class="viewport-shell" aria-labelledby="demo-title">
+        <div class="intro">
+          <p class="eyebrow">DESERT_DOG.BBMODEL / 1.15 MB</p>
+          <h1 id="demo-title">One file.<br /><em>Every bone moving.</em></h1>
+          <p class="lede">Textures, cubes, hierarchy, and Blockbench keyframes arrive as native Three.js objects—ready for an AnimationMixer.</p>
+        </div>
+
+        <div class="viewport" id="viewport">
+          <canvas id="model-canvas" aria-label="Animated 3D desert dog model"></canvas>
+          <div class="grid-label grid-label-x">X / 16</div>
+          <div class="grid-label grid-label-y">Y / 16</div>
+          <div class="load-state" id="load-state" role="status">
+            <span class="loader-cube" aria-hidden="true"></span>
+            <span id="load-message">Reading Blockbench project…</span>
+          </div>
+          <div class="viewport-tools" aria-label="Viewport settings">
+            <button id="toggle-rig" class="tool-button" type="button" aria-pressed="false">Rig</button>
+            <button id="reset-camera" class="tool-button" type="button">Frame</button>
+          </div>
+          <dl class="telemetry" aria-label="Loaded model statistics">
+            <div><dt>Meshes</dt><dd id="mesh-count">—</dd></div>
+            <div><dt>Bones</dt><dd id="bone-count">—</dd></div>
+            <div><dt>Clips</dt><dd id="clip-count">—</dd></div>
+          </dl>
+        </div>
+
+        <aside class="file-rail" aria-label="Format conversion summary">
+          <p>BB</p><span></span><p>THREE</p>
+          <dl>
+            <div><dt>UV</dt><dd>Atlas</dd></div>
+            <div><dt>Rig</dt><dd>Skeleton</dd></div>
+            <div><dt>Keys</dt><dd>Tracks</dd></div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="sequencer" aria-labelledby="sequencer-title">
+        <div class="transport">
+          <div>
+            <p class="eyebrow">ANIMATION MIXER</p>
+            <h2 id="sequencer-title"><span id="active-animation">animation.idle</span></h2>
+          </div>
+          <div class="transport-controls">
+            <button id="play-toggle" class="play-button" type="button" aria-label="Pause animation">
+              <span aria-hidden="true">Ⅱ</span>
+            </button>
+            <label class="time-readout" for="timeline">
+              <span id="current-time">0.00</span><small>/</small><span id="duration">0.00</span><small>s</small>
+            </label>
+          </div>
+        </div>
+        <input id="timeline" class="timeline" type="range" min="0" max="1" step="0.001" value="0" aria-label="Animation time" />
+        <div id="clip-list" class="clip-list" aria-label="Animation clips"></div>
+      </section>
+
+      <footer>
+        <p>Drag to orbit · scroll to zoom · choose any authored clip</p>
+        <p id="runtime-note">Built directly from the supplied Blockbench project.</p>
+      </footer>
+    </main>
+  </body>
+</html>

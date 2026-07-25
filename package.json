@@ -1,0 +1,66 @@
+{
+  "name": "three-blockbench",
+  "version": "0.1.0",
+  "description": "Load Blockbench .bbmodel projects as native Three.js geometry, textures, skeletons, and animation clips.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hoodgail/three-blockbench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hoodgail/three-blockbench/issues"
+  },
+  "homepage": "https://github.com/Hoodgail/three-blockbench#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "three",
+    "threejs",
+    "blockbench",
+    "bbmodel",
+    "loader",
+    "minecraft"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "vite --config examples/vite.config.ts",
+    "build:example": "vite build --config examples/vite.config.ts",
+    "preview": "vite preview --config examples/vite.config.ts",
+    "prepublishOnly": "npm run build && npm run typecheck && npm test"
+  },
+  "peerDependencies": {
+    "three": ">=0.170.0 <1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/three": "^0.185.1",
+    "three": "^0.185.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
+  }
+}
