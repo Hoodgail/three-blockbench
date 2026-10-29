@@ -94,7 +94,10 @@ export class BBMaterialRegistry {
   ): Material {
     const renderMode = textureData?.render_mode;
     const renderSides = textureData?.render_sides;
-    const side = renderSides === "double" ? DoubleSide : FrontSide;
+    // Blockbench resolves "auto" per format: only Java block models are front-only, everything else is double-sided.
+    const frontOnly = renderSides === "front"
+      || ((renderSides ?? "auto") === "auto" && this.document.meta.model_format === "java_block");
+    const side = frontOnly ? FrontSide : DoubleSide;
     if (!shade || renderMode === "additive") {
       const material = new MeshBasicMaterial({
         color,
